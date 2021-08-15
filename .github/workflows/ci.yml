@@ -38,6 +38,49 @@ jobs:
         with:
           name: build
           path: build.tar.gz
+  deploy:
+    if: "github.ref == 'refs/heads/master'"
+    name: Deploy
+    needs:
+      - build
+      - lint
+      - typescript
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Branch'
+        uses: 'actions/checkout@v1'
+      - name: 'Download Build'
+        uses: 'actions/download-artifact@v1'
+        with:
+          name: build
+      - name: 'Move Build'
+        run: 'mv build/build.tar.gz build.tar.gz'
+      - name: 'Extract Build'
+        run: 'tar -xzvf build.tar.gz'
+      - id: nvm
+        name: Read .nvmrc
+        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+      - name: 'Set Up Node'
+        uses: 'actions/setup-node@v1'
+        with:
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
+      - id: yarn-cache-location
+        name: 'Get Yarn Cache Location'
+        run: 'echo "::set-output name=dir::$(yarn cache dir)"'
+      - id: cache-yarn
+        name: 'Use Yarn Cache'
+        uses: 'actions/cache@v1'
+        with:
+          key: |
+            ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            ${{ steps.yarn-cache-location.outputs.dir }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: 'Yarn Install'
+        run: 'yarn install'
+      - name: 'Deploy Assets'
+        run: 'yarn deploy:assets'
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -98,56 +141,6 @@ jobs:
         run: yarn install --offline --frozen-lockfile
       - name: Run typecheck
         run: yarn typecheck
-  # deploy:
-  #   if: "github.ref == 'refs/heads/master'"
-  #   name: Deploy
-  #   needs:
-  #     - workflow-validation
-  #     - build
-  #     - eslint
-  #     - e2e-tests
-  #     - unit-tests
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: "Checkout Branch"
-  #       uses: "actions/checkout@v1"
-  #     - name: "Download Build"
-  #       uses: "actions/download-artifact@v1"
-  #       with:
-  #         name: build
-  #     - name: "Move Build"
-  #       run: "mv build/build.tar.gz build.tar.gz"
-  #     - name: "Extract Build"
-  #       run: "tar -xzvf build.tar.gz"
-  #     - name: "Configure AWS Credentials"
-  #       uses: "aws-actions/configure-aws-credentials@v1"
-  #       with:
-  #         aws-access-key-id: |
-  #           ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-region: us-west-1
-  #         aws-secret-access-key: |
-  #           ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #     - name: "Set Up Node"
-  #       uses: "actions/setup-node@v1"
-  #       with:
-  #         node-version: "12.10.0"
-  #     - id: yarn-cache-location
-  #       name: "Get Yarn Cache Location"
-  #       run: "echo \"::set-output name=dir::$(yarn cache dir)\""
-  #     - id: cache-yarn
-  #       name: "Use Yarn Cache"
-  #       uses: "actions/cache@v1"
-  #       with:
-  #         key: |
-  #           ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-  #         path: |
-  #           ${{ steps.yarn-cache-location.outputs.dir }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-yarn-
-  #     - name: "Yarn Install"
-  #       run: "yarn install"
-  #     - name: "Deploy Assets"
-  #       run: "yarn deploy:assets"
 name: 'CI'
 on:
   - push
