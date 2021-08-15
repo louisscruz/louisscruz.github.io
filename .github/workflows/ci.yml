@@ -79,8 +79,13 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: 'Yarn Install'
         run: 'yarn install'
-      - name: 'Deploy Assets'
-        run: 'yarn deploy:assets'
+      - name: Deploy
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: main
+          build_dir: public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   lint:
     name: Lint
     runs-on: ubuntu-latest
