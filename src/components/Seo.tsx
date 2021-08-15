@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Helmet } from "react-helmet";
-import { useStaticQuery, graphql } from "gatsby";
-import { useMemo } from "react";
+import * as React from 'react';
+import { Helmet } from 'react-helmet';
+import { useStaticQuery, graphql } from 'gatsby';
+import { useMemo } from 'react';
 
 interface SeoProps {
   description?: string;
