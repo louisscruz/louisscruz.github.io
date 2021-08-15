@@ -1,8 +1,8 @@
-import * as React from "react";
-import { StaticImage } from "gatsby-plugin-image";
-import styled from "styled-components";
+import * as React from 'react';
+import { StaticImage } from 'gatsby-plugin-image';
+import styled from 'styled-components';
 
-import Layout from "../components/Layout";
+import Layout from '../components/Layout';
 
 const Ul = styled.ul`
   width: 100%;
@@ -33,7 +33,7 @@ const IndexPage = React.memo(() => (
     <p>Currently, I'm a staff engineer and group technical lead at Zendesk.</p>
     <ImageContainer>
       <StaticImage
-        src={"../images/profile.jpeg"}
+        src="../images/profile.jpeg"
         alt="Image of Louis Cruz"
         width={160}
         height={160}

@@ -1,15 +1,7 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.com/docs/use-static-query/
- */
+import * as React from 'react';
+import styled from 'styled-components';
 
-import * as React from "react";
-import { useStaticQuery, graphql } from "gatsby";
-import styled from "styled-components";
-
-import GlobalStyles from "./GlobalStyles";
+import GlobalStyles from './GlobalStyles';
 
 const MainContentContainer = styled.div`
   display: flex;
@@ -19,6 +11,7 @@ const MainContentContainer = styled.div`
 const Main = styled.main`
   max-width: 900px;
 `;
+
 const Layout = React.memo(({ children }) => (
   <>
     <GlobalStyles />
