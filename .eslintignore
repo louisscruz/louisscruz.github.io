@@ -1,4 +1,4 @@
-node_modules
-npm-packages-offline-cache
-public
-.cache
+node_modules/**
+npm-packages-offline-cache/**
+public/**
+.cache/**

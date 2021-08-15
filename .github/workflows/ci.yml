@@ -3,21 +3,21 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout Branch"
-        uses: "actions/checkout@v1"
+      - name: 'Checkout Branch'
+        uses: 'actions/checkout@v1'
       - id: nvm
         name: Read .nvmrc
         run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
-      - name: "Set Up Node"
-        uses: "actions/setup-node@v1"
+      - name: 'Set Up Node'
+        uses: 'actions/setup-node@v1'
         with:
-          node-version: "${{ steps.nvm.outputs.NVMRC }}"
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
       - id: yarn-cache-location
-        name: "Get Yarn Cache Location"
+        name: 'Get Yarn Cache Location'
         run: 'echo "::set-output name=dir::$(yarn cache dir)"'
       - id: cache-yarn
-        name: "Use Yarn Cache"
-        uses: "actions/cache@v1"
+        name: 'Use Yarn Cache'
+        uses: 'actions/cache@v1'
         with:
           key: |
             ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -30,33 +30,63 @@ jobs:
       - name: Yarn Build
         run: yarn build
       - if: "github.ref == 'refs/heads/master'"
-        name: "Compress Build"
-        run: "tar -czf build.tar.gz public .cache"
+        name: 'Compress Build'
+        run: 'tar -czf build.tar.gz public .cache'
       - if: "github.ref == 'refs/heads/master'"
-        name: "Place Build in Artifacts"
-        uses: "actions/upload-artifact@v1"
+        name: 'Place Build in Artifacts'
+        uses: 'actions/upload-artifact@v1'
         with:
           name: build
           path: build.tar.gz
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Branch'
+        uses: 'actions/checkout@v1'
+      - id: nvm
+        name: Read .nvmrc
+        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+      - name: 'Set Up Node'
+        uses: 'actions/setup-node@v1'
+        with:
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
+      - id: yarn-cache-location
+        name: 'Get Yarn Cache Location'
+        run: 'echo "::set-output name=dir::$(yarn cache dir)"'
+      - id: cache-yarn
+        name: 'Use Yarn Cache'
+        uses: 'actions/cache@v1'
+        with:
+          key: |
+            ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            ${{ steps.yarn-cache-location.outputs.dir }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Yarn Install
+        run: yarn install --offline --frozen-lockfile
+      - name: Run lint
+        run: yarn lint
   typescript:
     name: TypeScript
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout Branch"
-        uses: "actions/checkout@v1"
+      - name: 'Checkout Branch'
+        uses: 'actions/checkout@v1'
       - id: nvm
         name: Read .nvmrc
         run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
-      - name: "Set Up Node"
-        uses: "actions/setup-node@v1"
+      - name: 'Set Up Node'
+        uses: 'actions/setup-node@v1'
         with:
-          node-version: "${{ steps.nvm.outputs.NVMRC }}"
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
       - id: yarn-cache-location
-        name: "Get Yarn Cache Location"
+        name: 'Get Yarn Cache Location'
         run: 'echo "::set-output name=dir::$(yarn cache dir)"'
       - id: cache-yarn
-        name: "Use Yarn Cache"
-        uses: "actions/cache@v1"
+        name: 'Use Yarn Cache'
+        uses: 'actions/cache@v1'
         with:
           key: |
             ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -118,6 +148,6 @@ jobs:
   #       run: "yarn install"
   #     - name: "Deploy Assets"
   #       run: "yarn deploy:assets"
-name: "CI"
+name: 'CI'
 on:
   - push

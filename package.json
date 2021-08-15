@@ -50,6 +50,7 @@
     "commit": "cz",
     "develop": "gatsby develop --host $(ifconfig | awk '/inet 192\\.168\\.[0-9]+\\.[0-9]+/{print $2}') --port 8000",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "lint": "eslint -c ./.eslintrc.js ./ --ext .tsx --ext .ts --ext .js --ext .jsx",
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
