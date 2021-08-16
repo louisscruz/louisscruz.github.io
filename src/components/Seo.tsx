@@ -64,7 +64,9 @@ const Seo = React.memo<SeoProps>(({ description, lang, title }) => {
     [lang]
   );
 
-  return <Helmet htmlAttributes={htmlAttributes} title={title} meta={meta} />;
+  return (
+    <Helmet htmlAttributes={htmlAttributes} title={titleToUse} meta={meta} />
+  );
 });
 
 export default Seo;
