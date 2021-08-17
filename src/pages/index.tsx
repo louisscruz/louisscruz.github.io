@@ -40,6 +40,8 @@ const IndexPage = React.memo(() => (
         <StaticImage
           src="../images/profile.jpeg"
           alt="Image of Louis Cruz"
+          layout="fixed"
+          placeholder="blurred"
           width={160}
           height={160}
         />
