@@ -6,6 +6,7 @@ import GlobalStyles from './GlobalStyles';
 const MainContentContainer = styled.div`
   display: flex;
   justify-content: center;
+  height: 100vh;
 `;
 
 const Main = styled.main`
