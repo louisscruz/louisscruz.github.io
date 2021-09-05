@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Link } from 'gatsby';
-import type { Theme } from '../types';
+import globalTheme from '../theme';
+import Seo from '../components/Seo';
 
 const GlobalStyles = createGlobalStyle`
   html, body {
@@ -129,7 +130,7 @@ const NavigationLink = styled(Link)`
   }
 `;
 
-const PrimaryNavigationLink = styled(Link)`
+const PrimaryNavigationLink = styled.a`
   background-color: ${({ theme }) => theme.colors[theme.primaryHue]['700']};
   border-radius: ${({ theme }) => theme.borderRadii};
   color: ${({ theme }) => theme.colors.white};
@@ -139,6 +140,7 @@ const PrimaryNavigationLink = styled(Link)`
   outline: none;
   &:hover {
     background-color: ${({ theme }) => theme.colors[theme.primaryHue]['600']};
+    cursor: pointer;
   }
   &:active {
     background-color: ${({ theme }) => theme.colors[theme.primaryHue]['900']};
@@ -173,79 +175,9 @@ const Li = styled.li`
   list-style: none;
 `;
 
-const theme: Theme = {
-  borderRadii: '2px',
-  breakpoints: {
-    'extra-small': '512px',
-    small: '768px',
-    medium: '900px',
-    large: '1200px',
-    'extra-large': '1600px',
-  },
-  colors: {
-    black: '#000000',
-    blue: {
-      200: '#dee9ff',
-      300: '#c9dbff',
-      400: '#73a2ff',
-      500: '#4080ff',
-      600: '#3075ff',
-      700: '#0f4abf',
-      800: '#053187',
-      900: '#032870',
-    },
-    green: {
-      200: '#bdffc4',
-      300: '#84fa92',
-      400: '#51e863',
-      500: '#2dcc3f',
-      600: '#28b839',
-      700: '#11801e',
-      800: '#096113',
-      900: '#03470b',
-    },
-    grey: {
-      200: '#ededed',
-      300: '#d9d9d9',
-      400: '#ababab',
-      500: '#999999',
-      600: '#828282',
-      700: '#787878',
-      800: '#787878',
-      900: '#424242',
-    },
-    white: '#ffffff',
-  },
-  fontFamily: 'Helvetica, Arial, sans-serif',
-  primaryHue: 'blue',
-  renderables: {
-    headerItem: {
-      spacing: 'quadruple',
-    },
-  },
-  secondaryHue: 'green',
-  spacing: {
-    single: {
-      leftAndRight: '8px',
-      topAndBottom: '8px',
-    },
-    double: {
-      leftAndRight: '16px',
-      topAndBottom: '16px',
-    },
-    triple: {
-      leftAndRight: '32px',
-      topAndBottom: '32px',
-    },
-    quadruple: {
-      leftAndRight: '64px',
-      topAndBottom: '64px',
-    },
-  },
-};
-
 const Layout = React.memo(({ children }) => (
-  <ThemeProvider theme={theme}>
+  <ThemeProvider theme={globalTheme}>
+    <Seo />
     <GlobalStyles />
     <GlobalContainer>
       <HeaderContentContainer>
@@ -260,7 +192,7 @@ const Layout = React.memo(({ children }) => (
                 <NavigationLink to="/blog">Blog</NavigationLink>
               </NavigationLi>
               <NavigationLi>
-                <PrimaryNavigationLink to="something">
+                <PrimaryNavigationLink href="mailto:louisstephancruz@me.com">
                   Contact
                 </PrimaryNavigationLink>
               </NavigationLi>

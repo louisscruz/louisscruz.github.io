@@ -12,33 +12,53 @@ const PostPreview = styled.li`
   height: 80px;
 `;
 
-const Blog = React.memo<BlogProps>(({ data }) => {
-  return (
-    <>
-      <h2>Posts</h2>
-      <ul>
-        {data.allMdx.edges.map(edge => {
-          const {
-            node: { excerpt, id, slug, timeToRead },
-          } = edge;
-          const title = edge.node.frontmatter?.title;
+const Ul = styled.ul`
+  padding: 0;
+`;
 
-          return (
-            <PostPreview key={id}>
-              <Link to={`/blog/${slug}` || '/blog'}>{title || id}</Link>
-              {typeof timeToRead === 'number' ? (
-                <small>
-                  {timeToRead} {timeToRead === 1 ? 'minute' : 'minutes'} to read
-                </small>
-              ) : null}
-              <p>{excerpt}</p>
-            </PostPreview>
-          );
-        })}
-      </ul>
-    </>
-  );
-});
+const PublishDate = styled.small`
+  display: block;
+  font-style: italic;
+`;
+
+const TimeToRead = styled.small`
+  display: block;
+`;
+
+const Blog = React.memo<BlogProps>(({ data }) => (
+  <>
+    <h2>Posts</h2>
+    <Ul>
+      {data.allMdx.edges.map(edge => {
+        const {
+          node: { excerpt, frontmatter, id, slug, timeToRead },
+        } = edge;
+        const title = edge.node.frontmatter?.title;
+        const url = `/blog/${slug}` || '/blog';
+
+        return (
+          <PostPreview key={id}>
+            <Link to={url}>{title || id}</Link>
+            {typeof frontmatter?.date === 'string' ? (
+              <PublishDate>{frontmatter.date}</PublishDate>
+            ) : null}
+            {typeof timeToRead === 'number' ? (
+              <TimeToRead>
+                {timeToRead} {timeToRead === 1 ? 'minute' : 'minutes'} to read
+              </TimeToRead>
+            ) : null}
+            <p>
+              {excerpt}{' '}
+              <Link to={url} aria-label={`Read more of ${title}`}>
+                read more
+              </Link>
+            </p>
+          </PostPreview>
+        );
+      })}
+    </Ul>
+  </>
+));
 // allMdx(sort: { fields: frontmatter___date, order: DESC }) {
 
 export const pageQuery = graphql`
@@ -49,7 +69,7 @@ export const pageQuery = graphql`
         node {
           id
           slug
-          excerpt(pruneLength: 49, truncate: false)
+          excerpt(pruneLength: 200, truncate: false)
           timeToRead
           frontmatter {
             title

@@ -1,37 +1,39 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { useStaticQuery, graphql } from 'gatsby';
+import { graphql } from 'gatsby';
 import { useMemo } from 'react';
 
+import type { MetadataQueryQuery } from '../../graphql-types';
+
 interface SeoProps {
-  description?: string;
-  lang?: string;
-  title?: string;
+  data?: MetadataQueryQuery;
+  subTitle?: string;
 }
 
-const Seo = React.memo<SeoProps>(({ description, lang, title }) => {
-  const data = useStaticQuery(
-    graphql`
-      query {
-        site {
-          siteMetadata {
-            title
-            description
-            author
-          }
-        }
-      }
-    `
-  );
+const htmlAttributes = { lang: 'en' };
+const fallbackDescription = 'The website of Louis Cruz';
+const fallbackTitle = 'Louis Cruz';
 
-  const metaDescription = description || data.site.siteMetadata.description;
-  const titleToUse = data.site.siteMetadata?.title || title;
+const Seo = React.memo<SeoProps>(({ data, subTitle = '' }) => {
+  const { site } = data || {};
+
+  const { description, title } = useMemo(() => {
+    const primaryTitle = site?.siteMetadata?.title || fallbackTitle;
+    const titleToUse = subTitle
+      ? `${primaryTitle} | ${subTitle}`
+      : primaryTitle;
+
+    return {
+      description: site?.siteMetadata?.description || fallbackDescription,
+      title: titleToUse,
+    };
+  }, [site, subTitle]);
 
   const meta = useMemo(
     () => [
       {
         name: `description`,
-        content: metaDescription,
+        content: description,
       },
       {
         property: `og:title`,
@@ -39,7 +41,7 @@ const Seo = React.memo<SeoProps>(({ description, lang, title }) => {
       },
       {
         property: `og:description`,
-        content: metaDescription,
+        content: description,
       },
       {
         property: `og:type`,
@@ -51,22 +53,25 @@ const Seo = React.memo<SeoProps>(({ description, lang, title }) => {
       },
       {
         name: `twitter:description`,
-        content: metaDescription,
+        content: description,
       },
     ],
-    [metaDescription, titleToUse]
+    [description, title]
   );
 
-  const htmlAttributes = useMemo(
-    () => ({
-      lang,
-    }),
-    [lang]
-  );
-
-  return (
-    <Helmet htmlAttributes={htmlAttributes} title={titleToUse} meta={meta} />
-  );
+  return <Helmet htmlAttributes={htmlAttributes} title={title} meta={meta} />;
 });
+
+export const MetadataQuery = graphql`
+  query MetadataQuery {
+    site {
+      siteMetadata {
+        title
+        description
+        author
+      }
+    }
+  }
+`;
 
 export default Seo;
