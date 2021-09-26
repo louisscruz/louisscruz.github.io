@@ -3,19 +3,6 @@ import { StaticImage } from 'gatsby-plugin-image';
 import styled from 'styled-components';
 
 import Seo from '../components/Seo';
-import Layout from '../components/Layout';
-
-const Ul = styled.ul`
-  width: 100%;
-  display: flex;
-  padding: 0;
-  justify-content: center;
-`;
-
-const Li = styled.li`
-  padding: 10px;
-  list-style: none;
-`;
 
 const ImageContainer = styled.div`
   display: flex;
@@ -26,38 +13,22 @@ const ImageContainer = styled.div`
 const IndexPage = React.memo(() => (
   <>
     <Seo />
-    <Layout>
-      <h1>Louis Cruz</h1>
-      <p>
-        I'm a full-stack software engineer with a focus on frontend development
-        in TypeScript and React. I specialize in designing, building, and
-        maintaining critical services, features, and codebases at scale.
-      </p>
-      <p>
-        Currently, I'm a staff engineer and group technical lead at Zendesk.
-      </p>
-      <ImageContainer>
-        <StaticImage
-          src="../images/profile.jpeg"
-          alt="Image of Louis Cruz"
-          layout="fixed"
-          placeholder="blurred"
-          width={160}
-          height={160}
-        />
-      </ImageContainer>
-      <Ul>
-        <Li>
-          <a href="https://github.com/louisscruz/">GitHub</a>
-        </Li>
-        <Li>
-          <a href="https://www.linkedin.com/in/louisscruz/">LinkedIn</a>
-        </Li>
-        <Li>
-          <a href="mailto:louisstephancruz@me.com">Email</a>
-        </Li>
-      </Ul>
-    </Layout>
+    <ImageContainer>
+      <StaticImage
+        src="../images/profile.jpeg"
+        alt="Image of Louis Cruz"
+        layout="fixed"
+        placeholder="blurred"
+        width={256}
+        height={256}
+      />
+    </ImageContainer>
+    <p>
+      I'm a full-stack software engineer with a focus on frontend development in
+      TypeScript and React. I design, build, and maintain critical services,
+      features, and codebases at scale.
+    </p>
+    <p>Currently, I'm a staff engineer and group technical lead at Zendesk.</p>
   </>
 ));
 
