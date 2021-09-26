@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-pages-blog-index-tsx",
+    "path": "/blog/",
+    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"947ae64a-0d0c-5d55-8507-d1e9fe17112b","slug":"initial-commit","excerpt":"I'll keep this one short.\nThis post doesn't have any meaningful content, but soon there will be posts that are technical in nature.","timeToRead":1,"frontmatter":{"title":"Initial Commit","date":"September 4, 2021"},"wordCount":{"paragraphs":2,"sentences":2,"words":23}}}]}},"pageContext":{}},
+    "staticQueryHashes": []}
